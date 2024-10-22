@@ -1,0 +1,46 @@
+# https://packaging.python.org/en/latest/specifications/pyproject-toml/
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gato-compiler"
+license = {text = "EUPL-1.2"}
+description = "Compiler for the Gato programming language"
+readme = "README.md"
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Compilers",
+]
+requires-python = ">=3.12"
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://gato-lang.dev/"
+Repository = "https://github.com/gato-lang/gato.py"
+
+[tool.hatch.envs.hatch-test]
+extra-dependencies = [
+    "mypy>=1.12",
+]
+
+[tool.hatch.envs.hatch-test.scripts]
+cov-combine = "coverage combine"
+cov-report = "coverage report"
+doctest = "pytest --doctest-modules gato_compiler"
+run = ["typecheck", "tests", "doctest"]
+run-cov = "coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}"
+tests = "pytest{env:HATCH_TEST_ARGS:} {args}"
+typecheck = "mypy gato_compiler"
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.12"]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.mypy]
+strict = true
